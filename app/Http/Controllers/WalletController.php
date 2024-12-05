@@ -10,7 +10,7 @@ class WalletController extends Controller
     /*** Fungsi untuk membaca list wallet dari form blade ***/
     public function index(Request $request)
     {
-        $wallets = Wallet::get();
+        $wallets = Wallet::paginate(5);
         return view('pages.wallet.view', compact('wallets'));
     }
 
@@ -29,7 +29,7 @@ class WalletController extends Controller
         $wallet->status =  $request->status;
         $wallet->save();
 
-        return redirect()->route('wallets.index');
+        return redirect()->route('wallets.index')->with('success', 'New wallet added successfully.');
     }
 
     /*** Fungsi untuk menghapus list wallet dari form blade ***/

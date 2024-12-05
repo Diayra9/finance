@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Transaction;
 use App\Models\Category;
+use App\Models\User;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
 
@@ -23,7 +24,7 @@ class TransactionController extends Controller
             $query->whereMonth('date', $request->month);
         }
 
-        $transactions = $query->get();
+        $transactions = $query->paginate(5);
         return view('pages.transaction.view', compact('transactions'));
     }
 
@@ -35,8 +36,8 @@ class TransactionController extends Controller
             ->orderBy('name')
             ->take(5)
             ->get();
-
-        return view('pages.transaction.add', compact('categories', 'wallets'));
+        $users = User::role('user')->get();
+        return view('pages.transaction.add', compact('categories', 'wallets', 'users'));
     }
 
     /*** Fungsi untuk menyimpan transaction dari form blade ***/
@@ -58,7 +59,7 @@ class TransactionController extends Controller
 
         $wallet->save();
         $transaction->save();
-        return redirect()->route('transactions.index');
+        return redirect()->route('transactions.index')->with('success', 'New transaction added successfully.');
     }
 
     /*** Fungsi untuk menghapus list wallet dari form blade ***/
@@ -75,14 +76,18 @@ class TransactionController extends Controller
     /*** Fungsi untuk mengedit list transaction dari form blade ***/
     public function edit(Request $request, $id)
     {
-        $transaction = Transaction::with(['category', 'wallet'])->findOrFail($id);
+        if (!auth()->user()->hasRole('admin')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $transaction = Transaction::with(['user', 'category', 'wallet'])->findOrFail($id);
         $categories = Category::all();
         $wallets = Wallet::where('status', 1)
             ->orderBy('name')
             ->take(5)
             ->get();
-
-        return view('pages.transaction.edit', compact('categories', 'transaction', 'wallets'));
+        $users = User::where('id', $transaction->user_id)->get();
+        return view('pages.transaction.edit', compact('categories', 'transaction', 'wallets', 'users'));
     }
 
     /*** Fungsi untuk mengupdate transaction dari form blade ***/

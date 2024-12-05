@@ -11,7 +11,9 @@ class ProfileController extends Controller
     public function index(Request $request)
     {
         if (auth()->user()->hasRole(['admin'])) {
-            $users = User::get();
+            $users = User::whereHas('roles', function ($query) {
+                $query->whereIn('name', ['admin', 'user']);
+            })->paginate(5);
             return view('pages.profile.user-management', compact('users'));
         } else {
             return redirect()->route('dashboard')->with('error', 'You are not authorized.');

@@ -8,6 +8,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SessionsController;
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ConvertController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\WalletController;
 
@@ -55,11 +56,15 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('static-sign-up', function () {
 		return view('pages.static-sign-up');
 	})->name('static-sign-up');
+
+	Route::get('/currency/request', [ConvertController::class, 'requestForm']);
+	Route::post('/currency/convert', [ConvertController::class, 'convertCurrency']);
+	
 	Route::resource('/users', ProfileController::class);
 	Route::get('user-profile', [ProfileController::class, 'profile'])->name('user-profile');
 	Route::get('user-profile/edit', [ProfileController::class, 'edit_profile'])->name('user.edit-profile');
 	
-	Route::resource('/categories', CategoryController::class);
-	Route::resource('/wallets', WalletController::class);
+	Route::resource('/categories', CategoryController::class)->middleware('role:admin');
+	Route::resource('/wallets', WalletController::class)->middleware('role:admin');
 	Route::resource('/transactions', TransactionController::class);
 });

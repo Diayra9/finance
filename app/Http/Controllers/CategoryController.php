@@ -10,7 +10,7 @@ class CategoryController extends Controller
     /*** Fungsi untuk menyimpan category dari form blade ***/
     public function index(Request $request)
     {
-        $categories = Category::get();
+        $categories = Category::paginate(5);
         return view('pages.category.view', compact('categories'));
     }
 
@@ -26,7 +26,7 @@ class CategoryController extends Controller
         $category->category =  $request->category;
         $category->save();
 
-        return redirect()->route('categories.index');
+        return redirect()->route('categories.index')->with('success', 'New Category added successfully.');
     }
 
     /*** Fungsi untuk menghapus list wallet dari form blade ***/

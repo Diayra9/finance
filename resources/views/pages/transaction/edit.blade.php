@@ -25,6 +25,13 @@
                             @method('PUT')
                             <div class="row"> 
                                 <div class="mb-3 col-md-6">
+                                    <label class="form-label">User</label>
+                                    <input type="text" class="form-control border border-2 p-2" value="{{ $transaction->user->name }}" readonly>
+                                    @error('user_id')
+                                        <p class='text-danger inputerror'>{{ $message }}</p>
+                                    @enderror
+                                </div> 
+                                <div class="mb-3 col-md-6">
                                     <label class="form-label">Nominal</label>
                                     <input type="number" name="nominal" class="form-control border border-2 p-2" value="{{ $transaction->nominal }}">
                                 </div>      

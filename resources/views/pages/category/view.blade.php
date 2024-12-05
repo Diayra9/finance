@@ -9,6 +9,15 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card my-4">
+                        @if (session('success'))
+                            <div class="alert alert-success alert-dismissible text-white" role="alert">
+                                <span class="text-sm">{{ session('success') }}</span>
+                                <button type="button" class="btn-close text-lg py-3 opacity-10" data-bs-dismiss="alert"
+                                    aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        @endif
                         <div class=" me-3 my-3 text-end">
                             <a class="btn bg-gradient-dark mb-0" href="{{ url('/categories/create') }}"><i class="material-icons text-sm">add</i>&nbsp;&nbsp;Add New Category</a>
                         </div>
@@ -33,7 +42,7 @@
                                             <td>
                                                 <div class="d-flex px-2 py-1">
                                                     <div class="d-flex flex-column justify-content-center">
-                                                        <p class="mb-0 text-sm">{{ $loop->iteration }}</p>
+                                                        <p class="mb-0 text-sm">{{ ($categories->currentPage() - 1) * $categories->perPage() + $loop->iteration }}</p>
                                                     </div>
                                                 </div>
                                             </td>
@@ -63,6 +72,9 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                            </div>
+                            <div class="d-flex justify-content-center mt-3">
+                                {{ $categories->links('pagination::bootstrap-4') }}
                             </div>
                         </div>
                     </div>

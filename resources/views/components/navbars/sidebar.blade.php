@@ -8,7 +8,7 @@
             aria-hidden="true" id="iconSidenav"></i>
         <a class="navbar-brand m-0 d-flex text-wrap align-items-center" href=" {{ route('dashboard') }} ">
             <img src="{{ asset('assets') }}/img/logos/finance-logo.png" class="navbar-brand-img h-100" alt="main_logo">
-            <span class="ms-2 font-weight-bold text-white">GO FINANCE</span>
+            <span class="ms-2 font-weight-bold text-white">FinConnect</span>
         </a>
     </div>
     <hr class="horizontal light mt-0 mb-2">
@@ -116,7 +116,7 @@
                 <a class="btn bg-gradient-primary w-100" href="#">Let's Go Back!</a>
             </div>
             <div class="mx-3">
-                <a class="btn bg-gradient-primary w-100" href="#">View Grafik</a>
+                <a class="btn bg-gradient-primary w-100" href="{{ url('/currency/request') }}">AnyAPI Convert</a>
             </div>
         @endif
     </div>

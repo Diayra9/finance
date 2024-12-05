@@ -22,7 +22,23 @@
                     <div class="card-body p-3">
                         <form action="{{ route('transactions.store') }}" method="POST" enctype="multipart/form-data">
                             {{ csrf_field() }}
-                            <div class="row"> 
+                            <div class="row">
+                                @if(auth()->user()->hasRole('admin'))
+                                    <div class="mb-3 col-md-6">
+                                        <label class="form-label">User</label>
+                                        <div>
+                                            <select name="user_id" class="form-control border border-2 p-2" required>
+                                                <option value="" disabled selected>Click and Select One</option>
+                                                @foreach($users as $user)
+                                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            @error('user_id')
+                                                <p class='text-danger inputerror'>{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                    </div> 
+                                @endif
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Nominal</label>
                                     <input type="number" name="nominal" class="form-control border border-2 p-2" placeholder="Write Nominal You Want To Add..." required>
